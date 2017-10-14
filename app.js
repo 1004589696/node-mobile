@@ -7,8 +7,8 @@ var bodyParser = require('body-parser');
 
 
 
-var mobileRouter = require('./routes/mobileRouter');
-var pcRouter = require('./routes/pcRouter');
+var routeCollection = require('./routes/routeCollection');
+
 
 
 var app = express();
@@ -27,8 +27,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-app.use('/mobile', mobileRouter);
-app.use('/pc', pcRouter);
+app.use(routeCollection);
+
 
 
 
