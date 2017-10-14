@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 
-
+var filter = require("./routes/filter");
 var routeCollection = require('./routes/routeCollection');
 
 
@@ -26,7 +26,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-
+app.use(filter.routerFilter);
 app.use(routeCollection);
 
 

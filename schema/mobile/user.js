@@ -4,13 +4,13 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var db = require('./mongoose/db');
+var db = require('../mongoose/db');
 
 var bcrypt = require('bcrypt');
-const saltRounds = 16;
+const saltRounds = 10;
 
 var User = new Schema({
-    username: {type: String},
+    phone: {type: String},
     password: {type: String},
     createTime: {type: Date, default: Date.now}
 });
