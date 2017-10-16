@@ -12,6 +12,8 @@ const saltRounds = 10;
 var User = new Schema({
     phone: {type: String},
     password: {type: String},
+    access_token:{type: String},
+    refresh_token:{type: String},
     createTime: {type: Date, default: Date.now}
 });
 

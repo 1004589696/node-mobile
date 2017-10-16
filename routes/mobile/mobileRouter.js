@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcrypt');
+var jwt = require("jsonwebtoken");
 
 var User = require("../../schema/mobile/user.js");          //schema User
 
@@ -24,7 +25,6 @@ exports.mobileRouter = function (router) {
     }
 
     router.post('/mobile/api/public/newuser', function (req, res, next) {
-        console.log(111);
         if (!req.body.phone && !req.body.password) {
             res.json({
                 code: '2',
@@ -47,6 +47,13 @@ exports.mobileRouter = function (router) {
                     password: req.body.password,
                     phone: req.body.phone
                 };
+                var secretOrPrivateKey = "dingcunkuan The NO.1";
+                data.refresh_token = jwt.sign(data, secretOrPrivateKey, {
+                    expiresIn: 60 * 60 * 24 * 30  // 24*30小时过期
+                });
+                data.access_token = jwt.sign({password: req.body.password}, secretOrPrivateKey, {
+                    expiresIn: 60 * 60 * 24  // 24小时过期
+                });
                 var user = new User(data);
                 user.save(function (err, result) {
                     if (err) {
@@ -104,9 +111,30 @@ exports.mobileRouter = function (router) {
                                 msg: "Error: The Server Error"
                             });
                         } else if (code) {
-                            res.json({
-                                code: '0',
-                                data: result
+                            var reqData = {phone: req.body.phone, password: req.body.password};
+                            var updateData = {};
+                            var secretOrPrivateKey = "dingcunkuan The NO.1";
+                            updateData.refresh_token = jwt.sign(reqData, secretOrPrivateKey, {
+                                expiresIn: 60 * 60 * 24 * 30  // 24*30小时过期
+                            });
+                            updateData.access_token = jwt.sign({password: req.body.password}, secretOrPrivateKey, {
+                                expiresIn: 60 * 60 * 24  // 24小时过期
+                            });
+                            User.update(reqData, updateData, function (error, updateResult) {
+                                if (error) {
+                                    res.json({
+                                        code: '500',
+                                        msg: "Error: The Server Error"
+                                    });
+                                } else {
+                                    console.log(updateResult);
+                                    if(updateResult.ok == '1'){
+                                        res.json({
+                                            code: '0',
+                                            data: updateData
+                                        });
+                                    }
+                                }
                             });
                         } else {
                             res.json({
