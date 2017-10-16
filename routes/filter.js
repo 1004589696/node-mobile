@@ -8,7 +8,7 @@ var User = require("../schema/mobile/user.js");          //schema User
 
 exports.routerFilter = function (req, res, next) {
     var is_public = req.originalUrl.indexOf("/public");
-    if (is_public === -1) {
+    if (is_public !== -1) {
         return next();
     } else {
         clientFun(req, res, next);

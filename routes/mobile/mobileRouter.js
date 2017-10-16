@@ -24,6 +24,7 @@ exports.mobileRouter = function (router) {
     }
 
     router.post('/mobile/api/public/newuser', function (req, res, next) {
+        console.log(111);
         if (!req.body.phone && !req.body.password) {
             res.json({
                 code: '2',
