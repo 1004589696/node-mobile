@@ -53,7 +53,7 @@ exports.mobileRouter = function (router) {
                     expiresIn: 60 * 60 * 24 * 30  // 24*30小时过期
                 });
                 data.access_token = jwt.sign({password: req.body.password}, secretOrPrivateKey, {
-                    expiresIn: 60 * 60 * 24  // 24小时过期
+                    expiresIn: 60  // 24小时过期
                 });
                 var user = new User(data);
                 user.save(function (err, result) {
