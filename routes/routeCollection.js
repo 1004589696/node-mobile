@@ -3,10 +3,10 @@ var router = express.Router();
 
 
 //mobile
-require("./mobile/mobileRouter").mobileRouter(router);
+require("./mobile/userRouter").mobileRouter(router);
 
 //pc
-require("./pc/pcRouter").pcRouter(router);
+// require("./pc/pcRouter").pcRouter(router);
 
 
 module.exports = router;

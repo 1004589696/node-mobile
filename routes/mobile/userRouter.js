@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcrypt');
 var jwt = require("jsonwebtoken");
+var passport = require('passport');
 
 var User = require("../../schema/mobile/user.js");          //schema User
 
@@ -64,7 +65,10 @@ exports.mobileRouter = function (router) {
                     } else {
                         res.json({
                             code: '0',
-                            data: result
+                            data: {
+                                refresh_token:data.refresh_token,
+                                access_token:data.access_token
+                            }
                         });
                     }
                 });
@@ -118,7 +122,8 @@ exports.mobileRouter = function (router) {
                                 expiresIn: 60 * 60 * 24 * 30  // 24*30小时过期
                             });
                             updateData.access_token = jwt.sign({password: req.body.password}, secretOrPrivateKey, {
-                                expiresIn: 60 * 60 * 24  // 24小时过期
+                                // expiresIn: 60 * 60 * 24  // 24小时过期
+                                expiresIn: 60  // 24小时过期
                             });
                             User.update(reqData, updateData, function (error, updateResult) {
                                 if (error) {
@@ -150,6 +155,13 @@ exports.mobileRouter = function (router) {
                     });
                 }
             }
+        });
+    });
+
+    router.get('/mobile/api/draw',passport.authenticate('bearer', { session: false }),function (req, res, next) {
+        res.json({
+            code: '1',
+            msg: "用户名或密码错误"
         });
     });
 
