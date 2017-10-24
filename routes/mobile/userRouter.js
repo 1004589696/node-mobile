@@ -53,7 +53,7 @@ exports.mobileRouter = function (router) {
                     expiresIn: 60 * 60 * 24 * 30  // 24*30小时过期
                 });
                 data.access_token = jwt.sign({password: req.body.password}, secretOrPrivateKey, {
-                    expiresIn: 60  // 24小时过期
+                    expiresIn: 60 * 60 * 24  // 24小时过期
                 });
                 var user = new User(data);
                 user.save(function (err, result) {
@@ -66,8 +66,8 @@ exports.mobileRouter = function (router) {
                         res.json({
                             code: '0',
                             data: {
-                                refresh_token:data.refresh_token,
-                                access_token:data.access_token
+                                refresh_token: data.refresh_token,
+                                access_token: data.access_token
                             }
                         });
                     }
@@ -122,8 +122,7 @@ exports.mobileRouter = function (router) {
                                 expiresIn: 60 * 60 * 24 * 30  // 24*30小时过期
                             });
                             updateData.access_token = jwt.sign({password: req.body.password}, secretOrPrivateKey, {
-                                // expiresIn: 60 * 60 * 24  // 24小时过期
-                                expiresIn: 60  // 24小时过期
+                                expiresIn: 60 * 60 * 24  // 24小时过期
                             });
                             User.update(reqData, updateData, function (error, updateResult) {
                                 if (error) {
@@ -133,7 +132,7 @@ exports.mobileRouter = function (router) {
                                     });
                                 } else {
                                     console.log(updateResult);
-                                    if(updateResult.ok == '1'){
+                                    if (updateResult.ok == '1') {
                                         res.json({
                                             code: '0',
                                             data: updateData
@@ -158,11 +157,63 @@ exports.mobileRouter = function (router) {
         });
     });
 
-    router.get('/draw',passport.authenticate('bearer', { session: false }),function (req, res, next) {
-        res.json({
-            code: '1',
-            msg: "用户名或密码错误"
+    /**
+     *  refresh token
+     */
+    router.post('/public/refreshToken', function (req, res, next) {
+        if (!req.body.token) {
+            res.json({
+                code: '2',
+                msg: "Error: refreshToken不能为空！"
+            });
+        }
+        User.findOne({refresh_token: req.body.token}, function (err, result) {
+            if (err) {
+                res.json({
+                    code: '500',
+                    msg: "Error: The Server Error " + err
+                });
+            } else {
+                if (result) {
+                    var secretOrPrivateKey = "dingcunkuan The NO.1";
+                    var reqData = {phone: result.phone, password: result.password};
+                    var updateData = {};
+                    updateData.refresh_token = jwt.sign(reqData, secretOrPrivateKey, {
+                        expiresIn: 60 * 60 * 24 * 30  // 24*30小时过期
+                    });
+                    updateData.access_token = jwt.sign({password: result.password}, secretOrPrivateKey, {
+                        expiresIn: 60 * 60 * 24  // 24小时过期
+                    });
+                    User.update(reqData, updateData, function (error, updateResult) {
+                        if (error) {
+                            res.json({
+                                code: '500',
+                                msg: "Error: The Server Error"
+                            });
+                        } else {
+                            if (updateResult.ok == '1') {
+                                res.json({
+                                    code: '0',
+                                    data: updateData
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    res.json({
+                        code: '1',
+                        msg: "token错误"
+                    });
+                }
+            }
         });
     });
+
+    // router.get('/draw', passport.authenticate('bearer', {session: false}), function (req, res, next) {
+    //     res.json({
+    //         code: '1',
+    //         msg: "用户名或密码错误"
+    //     });
+    // });
 
 };
