@@ -9,6 +9,7 @@ var mongoose = require('mongoose'),
 /**
  * nodeMobile库连接 可建立多个连接库
  */
+mongoose.Promise = global.Promise;
 var nodeMobile = mongoose.createConnection(DB_URL,{ useMongoClient: true });
 
 

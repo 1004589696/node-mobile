@@ -5,6 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+const passport = require('passport');// 用户认证模块passport
+
 require('./routes/auth');
 var filter = require("./routes/filter");
 var routeCollection = require('./routes/routeCollection');
@@ -43,7 +45,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 /*
  ** 路由
  */
-
+app.use(passport.initialize());// 初始化passport模块
 app.use(filter.routerFilter);
 app.use(routeCollection);
 

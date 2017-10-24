@@ -12,7 +12,6 @@ var User = require("../schema/mobile/user.js");          //schema User
  */
 passport.use(new BearerStrategy(
     function (token, done) {
-        console.log(token);
         User.findOne({access_token: token}, function (err, userData) {
             if (err) {
                 return done(err);
@@ -21,14 +20,12 @@ passport.use(new BearerStrategy(
                 return done(null, false);
             }
             jwt.verify(token, 'dingcunkuan The NO.1', function(err, decoded) {
-
-                console.log(22222);
-                console.log(err);
-                console.log(decoded);
-                console.log(222222);
-
+                if(decoded){
+                    return done(null, userData);
+                }else{
+                    return done(null, false);
+                }
             });
-            return done(null, userData);
         });
     }
 ));
