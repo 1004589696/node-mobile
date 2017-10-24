@@ -25,7 +25,7 @@ exports.mobileRouter = function (router) {
         });
     }
 
-    router.post('/mobile/api/public/newuser', function (req, res, next) {
+    router.post('/public/newuser', function (req, res, next) {
         if (!req.body.phone && !req.body.password) {
             res.json({
                 code: '2',
@@ -93,7 +93,7 @@ exports.mobileRouter = function (router) {
         });
     }
 
-    router.post('/mobile/api/public/login', function (req, res, next) {
+    router.post('/public/login', function (req, res, next) {
         if (!req.body.phone && !req.body.password) {
             res.json({
                 code: '2',
@@ -158,7 +158,7 @@ exports.mobileRouter = function (router) {
         });
     });
 
-    router.get('/mobile/api/draw',passport.authenticate('bearer', { session: false }),function (req, res, next) {
+    router.get('/draw',passport.authenticate('bearer', { session: false }),function (req, res, next) {
         res.json({
             code: '1',
             msg: "用户名或密码错误"
