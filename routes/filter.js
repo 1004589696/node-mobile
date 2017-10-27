@@ -14,6 +14,6 @@ exports.routerFilter = function (req, res, next) {
 };
 
 var clientFun = function (req, res, next) {
-    var url = req.originalUrl;
+    // var url = req.originalUrl;
     return next();
 };
