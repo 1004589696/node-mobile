@@ -8,8 +8,7 @@ var bodyParser = require('body-parser');
 var passport = require('passport');// 用户认证模块passport
 require('./routes/auth');
 var filter = require("./routes/filter");
-var mobileRouter = require('./routes/mobile/mobileRouter');
-var pcRouter = require('./routes/pc/pcRouter');
+var router = require('./routes/router');
 
 
 
@@ -47,8 +46,7 @@ app.use(express.static(path.join(__dirname, 'public')));
  */
 app.use(passport.initialize());// 初始化passport模块
 app.use(filter.routerFilter);
-app.use('/api/mobile',mobileRouter.mobileRouter);
-app.use('/api/pc',pcRouter.pcRouter);
+app.use('/api',router);
 
 
 

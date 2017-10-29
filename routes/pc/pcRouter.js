@@ -1,6 +1,3 @@
-var express = require('express');
-var router = express.Router();
-
-exports.pcRouter = function(){
+exports.pcRouter = function(router){
     require("./lucydraw").pcRouter(router);
 };
