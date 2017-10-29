@@ -1,6 +1,3 @@
-var express = require('express');
-var router = express.Router();
-
 var LucyDraw = require("../../schema/pc/lucydraw");
 
 exports.pcRouter = function (router) {
