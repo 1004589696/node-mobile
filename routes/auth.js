@@ -36,22 +36,25 @@ passport.use(new BearerStrategy(
  */
 passport.use(new LocalStrategy(
     function(username, password, done) {
-        console.log(11);
-
-        console.log(username);
-        console.log(password);
-
-        console.log(11);
-        token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjEyMzQ1IiwicGFzc3dvcmQiOiIxMjM0NTYiLCJpYXQiOjE1MDk0MTM4NTYsImV4cCI6MTUwOTUwMDI1Nn0.dIVimdtBwXcWq9ce4grZMJtwnYJbF0pP7PeN6hPmRaw';
-        User.findOne({ username: username }, function(err, user) {
-            if (err) { return done(err); }
-            if (!user) {
-                return done(null, false, { message: 'Incorrect username.' });
+        // token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjEyMzQ1IiwicGFzc3dvcmQiOiIxMjM0NTYiLCJpYXQiOjE1MDk0MTM4NTYsImV4cCI6MTUwOTUwMDI1Nn0.dIVimdtBwXcWq9ce4grZMJtwnYJbF0pP7PeN6hPmRaw';
+console.log(username);
+        jwt.verify(username, 'dingcunkuan', function(err, decoded) {
+            if(decoded){
+                console.log(decoded);
+            }else{
+                return done(null, false);
             }
-            if (!user.validPassword(password)) {
-                return done(null, false, { message: 'Incorrect password.' });
-            }
-            return done(null, user);
         });
+
+        // User.findOne({ username: username }, function(err, user) {
+        //     if (err) { return done(err); }
+        //     if (!user) {
+        //         return done(null, false, { message: 'Incorrect username.' });
+        //     }
+        //     if (!user.validPassword(password)) {
+        //         return done(null, false, { message: 'Incorrect password.' });
+        //     }
+        //     return done(null, user);
+        // });
     }
 ));

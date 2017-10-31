@@ -32,7 +32,7 @@ exports.pcRouter = function (router) {
     /**
      * 管理员登录
      */
-    router.post('/adminLogin', passport.authenticate('local', { failureRedirect: '/login' }),function(err, user, info){
+    router.post('/adminLogin', passport.authenticate('local', { failureRedirect: '/' }),function(err, user, info){
         console.log(err, user, info);
         if(err) {
             res.json({
