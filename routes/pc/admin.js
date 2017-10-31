@@ -1,5 +1,6 @@
 var Admin = require("../../schema/pc/admin");
 
+var passport = require('passport');
 var jwt = require("jsonwebtoken");
 
 exports.pcRouter = function (router) {
@@ -31,28 +32,23 @@ exports.pcRouter = function (router) {
     /**
      * 管理员登录
      */
-    router.post('/adminLogin', function (req, res, next) {
-        passport.authenticate('local', {
-            successRedirect: '/',
-            failureRedirect: '/login'
-        }, function(err, user, info){
-            console.log(err, user, info);
-            if(err) {
-                res.json({
-                    code: '500',
-                    msg: "Error:" + err
-                });
-            }
-            if(!user) {
-                var secretOrPrivateKey = "dingcunkuan";
-                var token = jwt.sign(data, secretOrPrivateKey, {
-                    expiresIn: 60 * 60 * 24 // 24小时过期
-                });
-                res.json({
-                    code: '0',
-                    data: token
-                });
-            }
-        })(req, res, next);
+    router.post('/adminLogin', passport.authenticate('local', { failureRedirect: '/login' }),function(err, user, info){
+        console.log(err, user, info);
+        if(err) {
+            res.json({
+                code: '500',
+                msg: "Error:" + err
+            });
+        }
+        if(!user) {
+            var secretOrPrivateKey = "dingcunkuan";
+            var token = jwt.sign(data, secretOrPrivateKey, {
+                expiresIn: 60 * 60 * 24 // 24小时过期
+            });
+            res.json({
+                code: '0',
+                data: token
+            });
+        }
     });
 };

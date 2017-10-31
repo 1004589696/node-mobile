@@ -36,6 +36,12 @@ passport.use(new BearerStrategy(
  */
 passport.use(new LocalStrategy(
     function(username, password, done) {
+        console.log(11);
+
+        console.log(username);
+        console.log(password);
+
+        console.log(11);
         token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjEyMzQ1IiwicGFzc3dvcmQiOiIxMjM0NTYiLCJpYXQiOjE1MDk0MTM4NTYsImV4cCI6MTUwOTUwMDI1Nn0.dIVimdtBwXcWq9ce4grZMJtwnYJbF0pP7PeN6hPmRaw';
         User.findOne({ username: username }, function(err, user) {
             if (err) { return done(err); }
