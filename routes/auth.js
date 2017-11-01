@@ -3,15 +3,17 @@
  */
 var passport = require('passport');
 var BearerStrategy = require('passport-http-bearer').Strategy;
-var LocalStrategy = require('passport-local').Strategy;
 var jwt = require("jsonwebtoken");
+var bcrypt = require('bcrypt');
+const saltRounds = 10;
 
-var User = require("../schema/mobile/user.js");          //schema User
+var User = require("../schema/mobile/user");          //schema User
+var Admin = require("../schema/pc/admin");
 
 /**
  * passport  OAuth 2.0
  */
-passport.use(new BearerStrategy(
+passport.use('bearer',new BearerStrategy(
     function (token, done) {
         User.findOne({access_token: token}, function (err, userData) {
             if (err) {
@@ -31,30 +33,45 @@ passport.use(new BearerStrategy(
     }
 ));
 
-/**
- * passport  用户名密码
- */
-passport.use(new LocalStrategy(
-    function(username, password, done) {
-        // token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjEyMzQ1IiwicGFzc3dvcmQiOiIxMjM0NTYiLCJpYXQiOjE1MDk0MTM4NTYsImV4cCI6MTUwOTUwMDI1Nn0.dIVimdtBwXcWq9ce4grZMJtwnYJbF0pP7PeN6hPmRaw';
-console.log(username);
-        jwt.verify(username, 'dingcunkuan', function(err, decoded) {
+
+function IsUser(password, hash, callback) {
+    bcrypt.compare(password, hash, function (err, checkData) {
+        if (err) {
+            callback('500')
+        } else {
+            if (checkData) {
+                callback(true)
+            } else {
+                callback(false)
+            }
+        }
+    });
+}
+
+passport.use('bearerPC',new BearerStrategy(
+    function (token, done) {
+        jwt.verify(token, 'dingcunkuan', function(err, decoded) {
             if(decoded){
-                console.log(decoded);
+                Admin.findOne({username: decoded.username}, function (err, userData) {
+                    if (err) {
+                        return done(null, false);
+                    }
+                    if (!userData) {
+                        return done(null, false);
+                    }
+                    IsUser(decoded.password,userData.password,function (code) {
+                        if (code === '500') {
+                            return done(null, false);
+                        } else if (code) {
+                            return done(null, userData);
+                        } else {
+                            return done(null, false);
+                        }
+                    });
+                });
             }else{
                 return done(null, false);
             }
         });
-
-        // User.findOne({ username: username }, function(err, user) {
-        //     if (err) { return done(err); }
-        //     if (!user) {
-        //         return done(null, false, { message: 'Incorrect username.' });
-        //     }
-        //     if (!user.validPassword(password)) {
-        //         return done(null, false, { message: 'Incorrect password.' });
-        //     }
-        //     return done(null, user);
-        // });
     }
 ));
