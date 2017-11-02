@@ -126,14 +126,46 @@ exports.pcRouter = function (router) {
         })
     });
 
+    /**
+     * 管理员列表
+     */
+    router.get('/adminList', passport.authenticate('bearerPC', {session: false}), function(req, res, next){
+        var startTime = req.query.startTime;
+        var endTime = req.query.endTime;
+        var status = req.query.status;
+        var username = req.query.username;
+        username = username && new RegExp("^.*"+username+".*$");
 
+        var condition = {};
+        if (startTime && endTime) {
+            condition.createTime = {
+                $gte: new Date(startTime),
+                $lte: new Date(endTime)
+            }
+        }
+        status && (condition.status = status);
+        username && (condition.username = username);
+        var page = parseInt(req.query.page||0);
+        var size = parseInt(req.query.size||10);
 
+        var query = Admin.find(condition,{ username: 1, createTime: 1 });
+        query.limit(size);
+        query.skip(page * size);
+        query.sort({createTime:1});
+        query.exec(function(err,result){
+            if (err) {
+                res.json({
+                    code: '500',
+                    msg: "Error:" + err
+                });
+            } else {
+                console.log(result);
+                res.json({
+                    code: '0',
+                    data: result
+                });
+            }
+        });
+    });
 
-
-    // router.post('/adminLogin', passport.authenticate('bearerPC', {session: false}), function(req, res, next){
-    //     res.json({
-    //         code: '500',
-    //         msg: "Error:" + err
-    //     });
-    // });
 };
