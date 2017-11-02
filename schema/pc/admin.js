@@ -13,6 +13,7 @@ const saltRounds = 10;
 var Admin = new Schema({
     username: {type: String},
     password: {type: String},
+    status: {type: Boolean,default:false},
     createTime: {type: Date,default:Date.now}
 });
 
