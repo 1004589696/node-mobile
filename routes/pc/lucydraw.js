@@ -4,7 +4,7 @@ exports.pcRouter = function (router) {
     /**
      * 新建抽奖
      */
-    router.post('/addlucydraw', function (req, res, next) {
+    router.post('/addlucydraw', passport.authenticate('bearerPC', {session: false}), function (req, res, next) {
         var data = req.body;
         var lucyDrawObj = new LucyDraw(data);
         lucyDrawObj.save(function (err, result) {
