@@ -35,7 +35,11 @@ exports.pcRouter = function (router) {
         var curNum = Math.floor(Math.random() * arr[arr.length-1] + 1);
         for (var j = 0; j < arr.length; j++) {
             if (curNum < arr[j]) {
-                return drawList[j]._id;
+                if(drawList[j].drawCount>0){
+                    return drawList[j]._id;
+                }else{
+                    return '400';
+                }
             }
         }
         return '400';
@@ -110,3 +114,99 @@ exports.pcRouter = function (router) {
     });
 
 };
+
+
+function drawReduce(lucydrawId, drawId) {
+    LucyDraw.update({
+            _id: lucydrawId,
+            'drawList._id': drawId
+        },
+        {
+            $inc: {
+                "drawList.$.drawCount": -1
+            }
+        }, function (err, updateData) {
+            if (error) {
+
+            } else {
+                if (updateData.ok == '1') {
+
+                }else{
+
+                }
+            }
+        });
+}
+
+function drawReduce(lucydrawId, drawId) {
+    LucyDraw.update({
+            _id: lucydrawId,
+            'drawList._id': drawId
+        },
+        {
+            $inc: {
+                "drawList.$.drawCount": -1
+            }
+        }, function (err, updateData) {
+            if (error) {
+
+            } else {
+                if (updateData.ok == '1') {
+
+                }else{
+
+                }
+            }
+        });
+}
+
+
+function drawRecord(lucydrawId, drawId) {
+    LucyDraw.update({
+            _id: lucydrawId,
+            'drawList._id': drawId
+        },
+        {
+            $inc: {
+                "drawList.$.drawCount": -1
+            }
+        }, function (err, updateData) {
+            if (error) {
+
+            } else {
+                if (updateData.ok == '1') {
+
+                }else{
+
+                }
+            }
+        });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
