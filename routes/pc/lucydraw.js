@@ -1,3 +1,5 @@
+var passport = require('passport');
+
 var LucyDraw = require("../../schema/pc/lucydraw");
 
 exports.pcRouter = function (router) {
