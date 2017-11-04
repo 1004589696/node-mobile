@@ -7,8 +7,8 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-var User = require("../schema/mobile/user");          //schema User
-var Admin = require("../schema/pc/admin");
+var User = require("../schema/user");          //schema User
+var Admin = require("../schema/admin");
 
 
 function IsUser(password, hash, callback) {

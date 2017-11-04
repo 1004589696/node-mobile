@@ -3,7 +3,7 @@
  */
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var db = require('../mongoose/db');
+var db = require('./mongoose/db');
 
 
 var bcrypt = require('bcrypt');

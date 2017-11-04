@@ -1,4 +1,4 @@
-var Admin = require("../../schema/pc/admin");
+var Admin = require("../../schema/admin");
 
 var passport = require('passport');
 var jwt = require("jsonwebtoken");

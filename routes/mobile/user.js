@@ -3,7 +3,7 @@ var jwt = require("jsonwebtoken");
 var passport = require('passport');
 var secretOrPrivateKey = "dingcunkuan The NO.1";
 
-var User = require("../../schema/mobile/user.js");          //schema User
+var User = require("../../schema/user.js");          //schema User
 
 exports.mobileRouter = function (router) {
 
