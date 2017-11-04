@@ -167,13 +167,34 @@ function drawRecord(lucydrawId, drawId) {
 
 
 function drawQualification(lucydrawId,userId,countType,count,callback) {
-    LucyDrawRecord.find({lucydrawId: lucydrawId,userId:userId},function (err, result){
-        if (err) {
-            callback('500')
-        } else {
+    if(countType=='1'){
+        LucyDrawRecord.find({lucydrawId: lucydrawId,userId:userId},function (err, result){
+            if (err) {
+                callback('500')
+            } else if(result.length<count) {
+                callback(true)
+            }else{
+                callback(true)
+            }
+        })
+    }else{
+        var timeStamp = new Date(new Date().setHours(0, 0, 0, 0));
+        var startTime = new Date(timeStamp);
+        var endTime = new Date(timeStamp);
+        endTime = new Date(endTime.setDate(endTime.getDate()+1));
+        var createTime = {
+            $gte: startTime,
+            $lte: endTime
+        };
+        LucyDrawRecord.find({lucydrawId: lucydrawId,userId:userId,createTime:createTime},function (err, result){
+            if (err) {
+                callback('500')
+            } else {
 
-        }
-    })
+            }
+        })
+    }
+
 }
 
 
