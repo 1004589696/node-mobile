@@ -199,7 +199,6 @@ exports.mobileRouter = function (router) {
             }
         });
     });
-
 };
 
 
