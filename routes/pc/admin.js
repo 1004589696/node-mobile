@@ -197,7 +197,6 @@ exports.pcRouter = function (router) {
                     msg: "Error:" + err
                 });
             } else {
-                console.log(result);
                 res.json({
                     code: '0',
                     data: result
@@ -206,4 +205,13 @@ exports.pcRouter = function (router) {
         });
     });
 
+    /**
+     * 管理员登录验证
+     */
+    router.get('/adminValidate', passport.authenticate('bearerPC', {session: false}), function (req, res, next) {
+        res.json({
+            code: '0',
+            msg:'登录成功'
+        });
+    });
 };
