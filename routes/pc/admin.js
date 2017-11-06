@@ -97,29 +97,30 @@ exports.pcRouter = function (router) {
                         code: '100400',
                         msg: "该用户未被激活"
                     });
+                }else{
+                    IsUser(password, userData.password, function (code) {
+                        if (code === '500') {
+                            res.json({
+                                code: '500',
+                                msg: "Error: 服务器有脾气"
+                            });
+                        } else if (code) {
+                            var secretOrPrivateKey = "dingcunkuan";
+                            var token = jwt.sign({username: username, password: password}, secretOrPrivateKey, {
+                                expiresIn: 60 * 60 * 24 // 24小时过期
+                            });
+                            res.json({
+                                code: '0',
+                                result: token
+                            });
+                        } else {
+                            res.json({
+                                code: '100200',
+                                msg: "密码有误"
+                            });
+                        }
+                    });
                 }
-                IsUser(password, userData.password, function (code) {
-                    if (code === '500') {
-                        res.json({
-                            code: '500',
-                            msg: "Error: 服务器有脾气"
-                        });
-                    } else if (code) {
-                        var secretOrPrivateKey = "dingcunkuan";
-                        var token = jwt.sign({username: username, password: password}, secretOrPrivateKey, {
-                            expiresIn: 60 * 60 * 24 // 24小时过期
-                        });
-                        res.json({
-                            code: '0',
-                            data: token
-                        });
-                    } else {
-                        res.json({
-                            code: '100200',
-                            msg: "密码有误"
-                        });
-                    }
-                });
             } else {
                 res.json({
                     code: '100300',
@@ -151,7 +152,7 @@ exports.pcRouter = function (router) {
                 if (result.ok == '1') {
                     res.json({
                         code: '0',
-                        data: result
+                        result: result
                     });
                 } else {
                     res.json({
