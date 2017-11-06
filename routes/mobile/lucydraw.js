@@ -105,14 +105,14 @@ exports.mobileRouter = function (router) {
     function drawReduce(userId, lucydrawId, draw, callback) {
         LucyDraw.update({
                 _id: lucydrawId,
-                'drawList._id': drawId
+                'drawList._id': draw._id
             },
             {
                 $inc: {
                     "drawList.$.drawCount": -1
                 }
             }, function (err, updateData) {
-                if (error) {
+                if (err) {
                     callback(500);
                 } else {
                     if (updateData.ok == '1') {
@@ -120,7 +120,8 @@ exports.mobileRouter = function (router) {
                         data.userId = userId;
                         data.lucydrawId = lucydrawId;
                         data.draw = draw;
-                        LucyDrawRecord.save(function (err, result) {
+                        var saveLucyDrawRecordObj = new LucyDrawRecord(data);
+                        saveLucyDrawRecordObj.save(function (err, result) {
                             if (err) {
                                 callback(500);
                             } else {
@@ -137,7 +138,6 @@ exports.mobileRouter = function (router) {
     router.post('/lucydraw/:lucydrawId', passport.authenticate('bearer', {session: false}), function (req, res, next) {
         var lucydrawId = req.params.lucydrawId;
         var userId = req.body.userId;
-
         getFun(lucydrawId, userId, function (code) {
             switch (code) {
                 case 500:
@@ -177,13 +177,13 @@ exports.mobileRouter = function (router) {
                     });
                     break;
                 default:
-                    drawReduce(userId, lucydrawId, code, function (code) {
-                        if (code == 500) {
+                    drawReduce(userId, lucydrawId, code, function (codeNum) {
+                        if (codeNum == 500) {
                             res.json({
                                 code: '500',
                                 msg: "Error: 服务器错误"
                             });
-                        } else if (code) {
+                        } else if (codeNum) {
                             res.json({
                                 code: '0',
                                 msg: code
