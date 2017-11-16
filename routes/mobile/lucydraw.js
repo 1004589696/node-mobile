@@ -186,7 +186,8 @@ exports.mobileRouter = function (router) {
                         } else if (codeNum) {
                             res.json({
                                 code: '0',
-                                result: code
+                                result: code,
+                                user: req.user
                             });
                         } else {
                             res.json({
