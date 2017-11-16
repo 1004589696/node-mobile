@@ -1,3 +1,4 @@
+var testLog = require('../log').testLog;
 var bcrypt = require('bcrypt');
 var jwt = require("jsonwebtoken");
 var passport = require('passport');
@@ -31,6 +32,9 @@ exports.mobileRouter = function (router) {
                 msg: "Error: 用户名或密码不能为空！"
             });
         }
+
+        testLog.info('Hello world!', {timestamp: Date.now(), pid: process.pid});
+
         IsOldUser(req.body.phone, function (is_old) {
             if (is_old === '500') {
                 res.json({
