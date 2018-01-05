@@ -1,4 +1,7 @@
-exports.mobileRouter = function (router) {
-    require("./user").mobileRouter(router);
-    require("./lucydraw").mobileRouter(router);
-};
+var express = require('express');
+var router = express.Router();
+
+require("./user").mobileRouter(router);
+require("./lucydraw").mobileRouter(router);
+
+module.exports = router;
